@@ -6,9 +6,13 @@ public class Ball {
     private Point center;
     private int r;
     private Color color;
+    private Velocity velocity;
+    private int screenWidth;
+    private int screenHeight;
+
 
     // constructor
-    public Ball(int x, int y, int r, Color color) {
+    public Ball(double x, double y, int r, Color color) {
         this.center = new Point(x, y);
         this.r = r;
         this.color = color;
@@ -36,4 +40,44 @@ public class Ball {
         surface.setColor(this.color);
         surface.fillCircle(this.getX(), this.getY(), this.r);
     }
+
+    public void setVelocity(Velocity v){
+        this.velocity=v;
+    }
+    public void setVelocity(double dx, double dy){
+        this.velocity=new Velocity(dx,dy);
+    }
+    public Velocity getVelocity(){
+        return this.velocity;
+    }
+
+    public void setScreenSize(int width, int height) {
+        this.screenWidth = width;
+        this.screenHeight = height;
+    }
+
+
+    public void moveOneStep() {
+        if (this.velocity == null) {
+            return; // אל תעשה כלום אם אין מהירות
+        }
+
+
+        // חשב את המיקום הבא
+        Point next = this.velocity.applyToPoint(this.center);
+
+        // בדיקת גבולות אופקיים (שמאל/ימין)
+        if (next.getX() - r < 0 || next.getX() + r > screenWidth) {
+            this.velocity = new Velocity(-this.velocity.getDx(), this.velocity.getDy());
+        }
+
+        // בדיקת גבולות אנכיים (למעלה/למטה)
+        if (next.getY() - r < 0 || next.getY() + r > screenHeight) {
+            this.velocity = new Velocity(this.velocity.getDx(), -this.velocity.getDy());
+        }
+
+        this.center = this.getVelocity().applyToPoint(this.center);
+    }
+
+
 }
