@@ -12,15 +12,15 @@ public class BouncingBallAnimation {
         Sleeper sleeper = new Sleeper();
         Ball ball = new Ball(start.getX(), start.getY(), 30, java.awt.Color.BLACK);
         ball.setScreenSize(500,500);
-        Velocity v = Velocity.fromAngleAndSpeed(90, 2);
-        ball.setVelocity(v);
-       // ball.setVelocity(dx, dy);
+      //  Velocity v = Velocity.fromAngleAndSpeed(45, 20);
+      //  ball.setVelocity(v);
+        ball.setVelocity(dx, dy);
         while (true) {
             ball.moveOneStep();
             DrawSurface d = gui.getDrawSurface();
             ball.drawOn(d);
             gui.show(d);
-            sleeper.sleepFor(500);  // wait for 50 milliseconds.
+            sleeper.sleepFor(50);  // wait for 50 milliseconds.
         }
     }
     public static void main(String[] args) {

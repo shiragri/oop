@@ -9,6 +9,7 @@ public class Ball {
     private Velocity velocity;
     private int screenWidth;
     private int screenHeight;
+    private Frame frame;
 
 
     // constructor
@@ -56,23 +57,41 @@ public class Ball {
         this.screenHeight = height;
     }
 
+    public void setFrame(Frame f){
+        this.frame=f;
+    }
+
+    public Frame getFrame() {
+        return this.frame;
+    }
 
     public void moveOneStep() {
         if (this.velocity == null) {
             return; // אל תעשה כלום אם אין מהירות
         }
 
+        int topLeftx = 0;
+        int topLefty = 0;
+        int width = screenWidth;
+        int height = screenHeight;
+
+        if (frame != null) {
+            topLeftx = (int)frame.getTopLeft().getX();
+            topLefty = (int)frame.getTopLeft().getY();
+            width = frame.getWidth() + topLeftx;
+            height = frame.getHeight() + topLefty;
+        }
 
         // חשב את המיקום הבא
         Point next = this.velocity.applyToPoint(this.center);
 
         // בדיקת גבולות אופקיים (שמאל/ימין)
-        if (next.getX() - r < 0 || next.getX() + r > screenWidth) {
+        if (next.getX() - r < topLeftx || next.getX() + r > width) {
             this.velocity = new Velocity(-this.velocity.getDx(), this.velocity.getDy());
         }
 
         // בדיקת גבולות אנכיים (למעלה/למטה)
-        if (next.getY() - r < 0 || next.getY() + r > screenHeight) {
+        if (next.getY() - r < topLefty || next.getY() + r > height) {
             this.velocity = new Velocity(this.velocity.getDx(), -this.velocity.getDy());
         }
 
