@@ -9,14 +9,14 @@ public class Point {
         this.y=y;
     }
 
-    // distance -- return the distance of this point to the other point
+    // distance return the distance of this point to the other point
     public double distance(Point other) {
         double distanceX= this.x-other.x;
         double distanceY= this.y-other.y;
         return Math.sqrt(distanceX*distanceX + distanceY*distanceY);
     }
 
-    // equals -- return true is the points are equal, false otherwise
+    // equals return true is the points are equal, false otherwise
     public boolean equals(Point other) {
         if (other==null) {
             return false;

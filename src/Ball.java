@@ -67,7 +67,7 @@ public class Ball {
 
     public void moveOneStep() {
         if (this.velocity == null) {
-            return; // אל תעשה כלום אם אין מהירות
+            return;
         }
 
         int topLeftx = 0;
@@ -82,15 +82,15 @@ public class Ball {
             height = frame.getHeight() + topLefty;
         }
 
-        // חשב את המיקום הבא
+
         Point next = this.velocity.applyToPoint(this.center);
 
-        // בדיקת גבולות אופקיים (שמאל/ימין)
+
         if (next.getX() - r < topLeftx || next.getX() + r > width) {
             this.velocity = new Velocity(-this.velocity.getDx(), this.velocity.getDy());
         }
 
-        // בדיקת גבולות אנכיים (למעלה/למטה)
+
         if (next.getY() - r < topLefty || next.getY() + r > height) {
             this.velocity = new Velocity(this.velocity.getDx(), -this.velocity.getDy());
         }

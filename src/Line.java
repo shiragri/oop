@@ -83,9 +83,9 @@ public class Line {
 
     }
 
-    // equals -- return true is the lines are equal, false otherwise
+    // equals return true is the lines are equal, false otherwise
     public boolean equals(Line other) {
-        if (other == null) return false; // בדיקה נגד null
+        if (other == null) return false;
 
         return (this.start.equals(other.start) && this.end.equals(other.end)) ||
                 (this.start.equals(other.end) && this.end.equals(other.start));

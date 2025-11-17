@@ -12,19 +12,19 @@ public class MultipleBouncingBallsAnimation {
         int screenWidth = 500;
         int screenHeight = 500;
 
-        // ניצור מערך של כדורים לפי כמות המספרים בקלט
+
         Ball[] balls = new Ball[args.length];
 
         System.out.println(args.length);
-        // ניצור כל כדור לפי הגודל שהוזן
+
         for (int i = 0; i < args.length; i++) {
-            int r = Integer.parseInt(args[i]); // גודל הכדור
+            int r = Integer.parseInt(args[i]);
             int x = rand.nextInt(screenWidth - 2 * r) + r;
             int y = rand.nextInt(screenHeight - 2 * r) + r;
 
             Ball ball = new Ball(x, y, r, randomColor());
 
-            // נגדיר מהירות - ככל שהכדור גדול יותר, הוא איטי יותר
+
             double speed = getSpeedBySize(r);
             double angle = rand.nextDouble(360);// * 2 * Math.PI;
             Velocity v = Velocity.fromAngleAndSpeed(angle, speed);
@@ -41,7 +41,7 @@ public class MultipleBouncingBallsAnimation {
             balls[i] = ball;
         }
 
-        // לולאת האנימציה
+
         while (true) {
             DrawSurface d = gui.getDrawSurface();
 
@@ -55,7 +55,7 @@ public class MultipleBouncingBallsAnimation {
         }
     }
 
-    // פונקציה למהירות לפי גודל
+
     private static double getSpeedBySize(int size) {
         if (size >= 50) {
             return 2;
@@ -64,7 +64,7 @@ public class MultipleBouncingBallsAnimation {
         }
     }
 
-    // פונקציה לצבע רנדומלי
+
     private static Color randomColor() {
         Random rand = new Random();
         return new Color(rand.nextInt(256), rand.nextInt(256), rand.nextInt(256));

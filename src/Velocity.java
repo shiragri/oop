@@ -4,18 +4,18 @@ public class Velocity {
     private double dy;
 
     public static Velocity fromAngleAndSpeed(double angle, double speed) {
-        // המרת הזווית ממעלות לרדיאנים
+
         double angleInRadians = Math.toRadians(angle);
 
-        // dx (רכיב אופקי)
+
         double dx = speed * Math.sin(angleInRadians);
 
-        // dy (רכיב אנכי)
+
         double dy = -speed * Math.cos(angleInRadians);
         return new Velocity(dx, dy);
     }
 
-    // constructor
+
     public Velocity(double dx, double dy){
         this.dx = dx;
         this.dy = dy;
