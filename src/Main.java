@@ -6,21 +6,14 @@ import java.awt.Color;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        drawAnimation();
-    }
 
-    static private void drawAnimation() {
-        GUI gui = new GUI("title", 200, 200);
-        biuoop.Sleeper sleeper = new biuoop.Sleeper();
-        java.util.Random rand = new java.util.Random();
+        // 1. יוצרים מופע חדש של המשחק
+        Game game = new Game();
 
-        while (true) {
-            DrawSurface d = gui.getDrawSurface();
-            Ball ball = new Ball(rand.nextInt(200), rand.nextInt(200), 30, java.awt.Color.BLACK);
-            ball.drawOn(d);
-            gui.show(d);
-            sleeper.sleepFor(50);
-        }
+        // 2. מאתחלים את המשחק (יוצר GUI, בלוקים, כדור ומחבר את הסביבה)
+        game.initialize();
+
+        // 3. מריצים את לולאת האנימציה החדשה (שמשתמשת ב-SpriteCollection)
+        game.run();
     }
 }
-

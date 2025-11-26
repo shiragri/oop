@@ -1,8 +1,13 @@
-public class Block implements Collidable{
+import biuoop.DrawSurface; // כדי שהמחשב יכיר את DrawSurface, fillRectangle, וכו'.
+import java.awt.Color;    // כדי שהמחשב יכיר את המחלקה Color (צבע).
+
+public class Block implements Collidable,Sprite{
     private Rectangle rect;
+    private java.awt.Color color;
 
     //constructor
-    public Block(Rectangle rect){
+    public Block(Rectangle rect, java.awt.Color color) {
+        this.color = color;
         this.rect = rect;
     }
 
@@ -45,6 +50,31 @@ public class Block implements Collidable{
         }
 
         return new Velocity(newDx, newDy);
+    }
+
+
+    public void drawOn(DrawSurface d) {
+        d.setColor(this.color);
+        d.fillRectangle((int) this.rect.getUpperLeft().getX(),
+                (int) this.rect.getUpperLeft().getY(),
+                (int) this.rect.getWidth(),
+                (int) this.rect.getHeight());
+
+        d.setColor(Color.BLACK);
+        d.drawRectangle((int) this.rect.getUpperLeft().getX(),
+                (int) this.rect.getUpperLeft().getY(),
+                (int) this.rect.getWidth(),
+                (int) this.rect.getHeight());
+    }
+
+    @Override
+    public void timePassed() {
+        // הבלוק אינו מונפש כרגע
+    }
+
+    public void addToGame(Game g) {
+        g.addCollidable(this); // כבלוק, אני צריך להיכנס לסביבת ההתנגשות
+        g.addSprite(this);     // כספרייט, אני צריך להיכנס לאוסף הציור
     }
 }
 

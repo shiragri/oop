@@ -1,7 +1,8 @@
 import biuoop.DrawSurface;
 import java.awt.Color;
 
-public class Ball {
+
+public class Ball implements Sprite {
 
     private Point center;
     private int r;
@@ -10,6 +11,7 @@ public class Ball {
     private int screenWidth;
     private int screenHeight;
     private Frame frame;
+    private GameEnvironment gameEnvironment;
 
 
     // constructor
@@ -23,15 +25,12 @@ public class Ball {
     public int getX() {
         return (int) center.getX();
     }
-
     public int getY() {
         return (int) center.getY();
     }
-
     public int getSize() {
         return this.r;
     }
-
     public Color getColor() {
         return this.color;
     }
@@ -42,6 +41,7 @@ public class Ball {
         surface.fillCircle(this.getX(), this.getY(), this.r);
     }
 
+    // Velocity methods
     public void setVelocity(Velocity v){
         this.velocity=v;
     }
@@ -60,9 +60,12 @@ public class Ball {
     public void setFrame(Frame f){
         this.frame=f;
     }
-
     public Frame getFrame() {
         return this.frame;
+    }
+
+    public void setGameEnvironment(GameEnvironment gameEnvironment) {
+        this.gameEnvironment = gameEnvironment;
     }
 
     public void moveOneStep() {
@@ -70,33 +73,78 @@ public class Ball {
             return;
         }
 
-        int topLeftx = 0;
-        int topLefty = 0;
-        int width = screenWidth;
-        int height = screenHeight;
+//        //int topLeftx = 0;
+//        int topLefty = 0;
+//        int width = screenWidth;
+//        int height = screenHeight;
+//
+//        if (frame != null) {
+//            topLeftx = (int)frame.getTopLeft().getX();
+//            topLefty = (int)frame.getTopLeft().getY();
+//            width = frame.getWidth() + topLeftx;
+//            height = frame.getHeight() + topLefty;
+//        }
+//
+//
+//        Point next = this.velocity.applyToPoint(this.center);
+//
+//
+//        if (next.getX() - r < topLeftx || next.getX() + r > width) {
+//            this.velocity = new Velocity(-this.velocity.getDx(), this.velocity.getDy());
+//        }
+//
+//
+//        if (next.getY() - r < topLefty || next.getY() + r > height) {
+//            this.velocity = new Velocity(this.velocity.getDx(), -this.velocity.getDy());
+//        }
+//
+//        this.center = this.getVelocity().applyToPoint(this.center);
 
-        if (frame != null) {
-            topLeftx = (int)frame.getTopLeft().getX();
-            topLefty = (int)frame.getTopLeft().getY();
-            width = frame.getWidth() + topLeftx;
-            height = frame.getHeight() + topLefty;
+
+        // route calculation
+        Point start = this.center;
+        Point end = this.getVelocity().applyToPoint(this.center);
+        Line trajectory = new Line(start, end);
+
+        // check for collision
+        CollisionInfo collision = null;
+        if (this.gameEnvironment != null) {
+            collision = this.gameEnvironment.getClosestCollision(trajectory); // <--- חדש: שואלים את הסביבה
         }
 
 
-        Point next = this.velocity.applyToPoint(this.center);
-
-
-        if (next.getX() - r < topLeftx || next.getX() + r > width) {
-            this.velocity = new Velocity(-this.velocity.getDx(), this.velocity.getDy());
+        // if there is no collision
+        if (collision == null) {
+            this.center = end;
         }
 
+        // if there is collision
+        else {
+            Point collisionPoint = collision.collisionPoint();
+            Collidable object = collision.collisionObject();
 
-        if (next.getY() - r < topLefty || next.getY() + r > height) {
-            this.velocity = new Velocity(this.velocity.getDx(), -this.velocity.getDy());
+            // move the ball to a tight point
+            double newX = collisionPoint.getX() - this.velocity.getDx() / 1000;
+            double newY = collisionPoint.getY() - this.velocity.getDy() / 1000;
+            this.center = new Point(newX, newY);
+
+            // inform the object and get a new velocity
+            Velocity newV = object.hit(collisionPoint, this.velocity);
+            this.setVelocity(newV);
         }
 
-        this.center = this.getVelocity().applyToPoint(this.center);
     }
+    @Override
+    public void timePassed() {
+        this.moveOneStep();
+    }
+
+    public void addToGame(Game g) {
+        g.addSprite(this);
+        // הכדור צריך לקבל את סביבת המשחק (החלק המורכב יותר)
+        this.setGameEnvironment(g.getEnvironment());
+    }
+
 
 
 }
